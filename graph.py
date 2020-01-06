@@ -9,6 +9,7 @@ estimated_cycle = [0]
 optimal_cycle = []
 current_cycle = []
 visited_nodes = 0
+title = ""
 
 
 def update_cycle_node_list_by_labels_name(a_list):
@@ -16,16 +17,14 @@ def update_cycle_node_list_by_labels_name(a_list):
         a_list[i]+= 1;
     return a_list
 
-
 def create_graph(nt):
     return nt.Graph()
-
 
 def color_cycle_edges(graph, to_color):
     nodes = len(to_color)
     for i in range(nodes - 2):
-        graph[to_color[i+1]][to_color[i+2]]['color'] = 'g'
-    graph[to_color[1]][to_color[nodes-1]]['color'] = 'g'
+        graph[to_color[i+1]][to_color[i+2]]['color'] = "#2980b9"
+    graph[to_color[1]][to_color[nodes-1]]['color'] = "#2980b9"
 
 
 def draw_graph(g, cycle, nt):
@@ -37,8 +36,9 @@ def draw_graph(g, cycle, nt):
     nt.draw_networkx_edge_labels(g, pos, edge_labels=edges_labels, rotate=False, label_pos=0.2)
     nt.draw_networkx(g, pos, with_labels= False)
     edges_colors = [g[u][v]['color'] for u, v in g.edges]
-    nt.draw(g, pos, width=3, node_size=500, node_color='#A0CBE2', edges=g.edges,
+    nt.draw(g, pos, width=3, node_size=500, node_color='#f39c12', edges=g.edges,
             edge_color=edges_colors, with_labels=False, font_weight='bold')
+    plt.title(title)
     plt.show()
 
 
@@ -156,6 +156,7 @@ initialize_variables()
 # Bruteforce execution
 # --------------------
 
+title = "Brute Force PVC"
 bruteforce_time_begin = time.perf_counter()
 bruteforce(main_graph_bruteforce, 0)
 bruteforce_time_end = time.perf_counter()
@@ -174,6 +175,7 @@ print("        Time : " + repr(round(1000*bruteforce_time, 1)) + " ms")
 # Greedy execution
 # ----------------
 
+title = "Vorace PVC"
 greedy_time_begin = time.perf_counter()
 greedy(main_graph_greedy, 0)
 greedy_time_end = time.perf_counter()
@@ -186,3 +188,10 @@ print("Estimated Cycle : " + str(estimated_cycle[1:]))
 print("Estimated labeled Cycle" + str(update_cycle_node_list_by_labels_name(estimated_cycle)[1:]))
 print("Cost : " + str(estimated_cycle[0]))
 print("        Time : " + repr(round(1000*greedy_time, 1)) + " ms")
+
+
+# ----------------
+# Comparing executions
+# ----------------
+ratio = bruteforce_time / greedy_time
+print("The greedy algorithm is "+ repr(round(ratio, 1)) +" times faster")
